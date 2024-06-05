@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                fontFamily:{
+                    sans: ['Arial']
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <form method="post" action="Dashboard.html" enctype="multipart/form-data">
+        <fieldset class="bg-white rounded-lg shadow-md mb-5">
+            <div class="flex items-center">
+                <label for="e-mail" class="px-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 h-4">
+                        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+                    </svg>
+                </label>
+                <input class="rounded-md p-3" type="email" name="e-mail" placeholder="E-Mail"/>
+            </div>
+        </fieldset>
+
+        <fieldset class="bg-white rounded-lg shadow-md mb-5">
+            <div class="flex items-center">
+                <label for="password" class="px-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 h-4">
+                        <path d="M144 144v48H304V144c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192V144C80 64.5 144.5 0 224 0s144 64.5 144 144v48h16c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80z"/>
+                    </svg>
+                </label>
+                <input class="rounded-md p-3" id="password" type="password" name="password" placeholder="Passwort"/>
+            </div> 
+        </fieldset>
+        
+        <fieldset>
+            <div class="flex justify-center">
+                <button class="bg-white rounded-lg shadow-md p-3" type="submit">Anmelden</button>
+            </div>
+        </fieldset>
+        
+    </form>
+</body>
+
+</html>

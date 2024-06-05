@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persönlichkeit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                fontFamily:{
+                    sans: ['Arial']
+                }
+            }
+        }
+    </script>
+    <script src="Questions.js" defer></script>
+    <style>
+        .min-w-screenhalf {
+          min-width: 50vw;
+        }
+      </style>
+</head>
+
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <div>
+        <form id="question-form">
+            <fieldset class="">
+                <legend id="questions-place" class="text-center p-3 text-5xl"></legend>
+                <div class="flex pt-5 justify-center">
+                    <div class="text-xl pr-5">Stimmt nicht</div>
+                    <div>
+                        <input type="radio" id="value1" name="options" value="0" class="h-8 w-8">
+                        <input type="radio" id="value2" name="options" value="3" class="h-8 w-8">
+                        <input type="radio" id="value3" name="options" value="5" class="h-8 w-8">
+                        <input type="radio" id="value4" name="options" value="7" class="h-8 w-8">
+                        <input type="radio" id="value5" name="options" value="10" class="h-8 w-8">
+                    </div>
+                    <div class="text-xl pl-5">Stimmt</div>
+                </div>
+            </fieldset>
+            <div class="flex justify-center pt-20">
+                <div class="min-w-screenhalf flex justify-between">
+                    <button id="back" class="bg-white mr-5 p-5 rounded-lg shadow-md">Zurück</button>
+                    <button id="next" class="bg-white p-5 rounded-lg shadow-md">Weiter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
