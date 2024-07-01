@@ -16,7 +16,7 @@
             }
         }
     </script>
-    <script src="Questions.js" defer></script>
+    <script src="{{url_for('static', filename='Questions.js')}}" defer></script>
     <style>
         .min-w-screenhalf {
           min-width: 50vw;
@@ -27,7 +27,7 @@
 <body class="bg-gray-100 h-screen flex items-center justify-center">
     <div>
         <form id="question-form">
-            <fieldset class="">
+            <fieldset>
                 <legend id="questions-place" class="text-center p-3 text-5xl"></legend>
                 <div class="flex pt-5 justify-center">
                     <div class="text-xl pr-5">Stimmt nicht</div>

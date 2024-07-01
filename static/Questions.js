@@ -107,6 +107,7 @@ function showLastQuestions(){
     }
 }
 let categories = ["Pünktlich","Durchsetzungsfähig","Aufgabenorientiert"," Ruhig", "Direkt","Freundlich", "Spontan", "Impulsiv"];
+let categoriesValues = [];
 let c = 0;
 function end(){
     for(let i = 0; i< questions.length; i += 5){
@@ -115,12 +116,28 @@ function end(){
             let value = localStorage.getItem(`${i+j}_question`);
             x += parseFloat(value)/5;
         }
-        if(c < categories-length){
+        if(c < categories.length){
             localStorage.setItem(`${categories[c]}`,Math.round(x));
         }
         c++;
     }
-}
+    
+    for(let i = 0; i < categories.length; i++){
+        let value = localStorage.getItem(`${categories[i]}`);
+        if(value!= null){
+            categoriesValues[i] = value;
+        }
+        else{
+            categoriesValues[i] = ("");
+        }
+    }
+    fetch('/Persoenlichkeit',{
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({points:categoriesValues})
+    });
+    
+};
 
 
 loadQuestion(questionsIndex);
@@ -132,9 +149,9 @@ nextButton.addEventListener('click', (event) => {
 backButton.addEventListener('click',(event) =>{
     event.preventDefault();
     showLastQuestions();
-} )
+} );
 
 endButton.addEventListener('click', (event) =>{
     event.preventDefault();
     end();
-})
+});

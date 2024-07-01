@@ -21,9 +21,9 @@
       transition:all .4s ease-in-out;
     }
     </style>
-    <script src="DonutChart.js" defer></script>
-    <script src="RadarChart.js" defer></script>
-    <script src="BarChart.js" defer></script>
+    <script src="{{url_for('static', filename ='DonutChart.js')}}" defer></script>
+    <script src="{{url_for('static', filename ='RadarChart.js')}}" defer></script>
+    <script src="{{url_for('static', filename ='BarChart.js')}}" defer></script>
 </head>
 
 <body>
@@ -34,7 +34,7 @@
               <div>
                 <ul class="space-y-2 tracking-wide">
                   <li class="min-w-max">
-                    <a href="Dashboard.html" aria-label="dashboard" class="relative flex items-center space-x-4 bg-gradient-to-r from-indigo-600 to-sky-400 px-4 py-3 text-white">
+                    <a href="/" aria-label="dashboard" class="relative flex items-center space-x-4 bg-gradient-to-r from-indigo-600 to-sky-400 px-4 py-3 text-white">
                       <svg class="-ml-1 h-6 w-6" viewBox="0 0 24 24" fill="none">
                         <path d="M6 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8ZM6 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1Z" class="fill-current text-cyan-400"></path>
                         <path d="M13 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V8Z" class="fill-current text-cyan-200 group-hover:text-indigo-800"></path>
@@ -44,14 +44,7 @@
                     </a>
                   </li>
                   <li class="min-w-max">
-                    <a href="CreateTest.html" class="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600 ">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 512 512" fill="currentColor">
-                        <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM232 344V280H168c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H280v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg>
-                      <span class="group-hover:text-gray-700">Create Test</span>
-                    </a>
-                  </li>
-                  <li class="min-w-max">
-                    <a href="LogIn.html" class="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
+                    <a href="/LogIn" class="group flex items-center space-x-4 rounded-md px-4 py-3 text-gray-600">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 512 512" fill="currentColor">
                         <path class="fill-current text-gray-600 group-hover:text-cyan-600" d="M217.9 105.9L340.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L217.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1L32 320c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM352 416l64 0c17.7 0 32-14.3 32-32l0-256c0-17.7-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l64 0c53 0 96 43 96 96l0 256c0 53-43 96-96 96l-64 0c-17.7 0-32-14.3-32-32s14.3-32 32-32z"/></svg>
                       <span class="group-hover:text-gray-700">Log in</span>
