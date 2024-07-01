@@ -24,7 +24,6 @@
     <script src="{{url_for('static', filename ='DonutChart.js')}}" defer></script>
     <script src="{{url_for('static', filename ='RadarChart.js')}}" defer></script>
     <script src="{{url_for('static', filename ='BarChart.js')}}" defer></script>
-    <script src="{{url_for('static', filename = 'AutoSubmit.js')}}" defer></script>
 </head>
 
 <body>
@@ -58,29 +57,23 @@
 
           <!-- Diagramme-->
           <main class="flex-auto grid grid-cols-3 gap-10 grid-rows-2 h-screen">
-            <div class="bg-white rounded shadow-md my-5 ml-5">
-              <form method="post" action="" enctype="application/x-www-form-urlencoded">
-                <select class="" id="user_id" name="user_id">
-                  {%for index in range(data['nachnamen']| length)%}
-                    <option value="{{ data['ID'][index] }}">{{ data['nachnamen'][index] }} {{ data['vornamen'][index] }}</option>
-                  {% endfor %}
-                </select>
-              </form>
+            <div class="bg-white rounded shadow-md ml-5 my-5 relative overflow-hidden">
+              <canvas class="max-w-full max-h-full" id="donutChart"></canvas>
             </div>
             <div class="bg-white rounded shadow-md my-5 relative overflow-hidden">
-              <canvas class="max-w-full max-h-full" id="donutChart"></canvas>
+              <canvas class="max-w-full max-h-full" id="radarChart"></canvas>
             </div>
             <div class="bg-white rounded shadow-md my-5 mr-5 relative overflow-hidden row-span-2">
               <canvas class="max-w-full max-h-full" id="barChart"></canvas>
             </div>
-            <div class="bg-white rounded shadow-md ml-5 mb-5 overflow-hidden">
+            <div class="bg-white rounded shadow-md mb-5 ml-5">
+              <p class="text-3xl m-4">Logged in as:</p>
+            </div>
+            <div class="bg-white rounded shadow-md mb-5 overflow-hidden">
               <p class="text-3xl m-4">Test solved from:</p>
               <p class="text-lg mx-4">Oskar</p>
               <p class="text-3xl m-4">Date:</p>
               <p class="text-lg mx-4">25.05.2023</p>
-            </div>
-            <div class="bg-white rounded shadow-md mb-5 relative overflow-hidden">
-              <canvas class="max-w-full max-h-full" id="radarChart"></canvas>
             </div>
             
           </main>

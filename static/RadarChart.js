@@ -6,7 +6,7 @@ function initializeChart(){
         const data1 = {
             labels: ['Pünktlich', 'Durchsetzungsfähig', 'Aufgabenorientiert', 'Ruhig', 'Direkt', 'Freundlich', 'Spontan', 'Impulsiv'],
             datasets: [{
-                data: dataRadar.values
+                data: dataRadar.personality
             }]
         };
         const options1 = {
@@ -40,11 +40,15 @@ function initializeChart(){
 
 };
 function updateChart(){
-    fetch('/get_data')
+    const data = document.getElementById('user_id').value;
+    fetch('/get_data',{
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({id:data})
+    })
     .then(response => response.json())
     .then(dataRadar => {
-        console.log(dataRadar)
-        radarChart.data.datasets[0].data = dataRadar.values;
+        radarChart.data.datasets[0].data = dataRadar.personality;
         radarChart.update();
     })
 };

@@ -33,6 +33,5 @@ async function handleSubmit(event){
         window.location.href = redirectUrl;
     } else {
         console.log("Login failed:");
-        // Hier kannst du eine Fehlermeldung auf der Seite anzeigen
     }
 }
