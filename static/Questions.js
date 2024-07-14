@@ -121,22 +121,7 @@ function end(){
         }
         c++;
     }
-    
-    for(let i = 0; i < categories.length; i++){
-        let value = localStorage.getItem(`${categories[i]}`);
-        if(value!= null){
-            categoriesValues[i] = value;
-        }
-        else{
-            categoriesValues[i] = ("");
-        }
-    }
-    fetch('/Persoenlichkeit',{
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({points:categoriesValues})
-    });
-    
+    window.location.href = "/LandingPage"; 
 };
 
 

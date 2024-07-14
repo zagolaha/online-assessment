@@ -35,7 +35,7 @@
               <div>
                 <ul class="space-y-2 tracking-wide">
                   <li class="min-w-max">
-                    <a href="/" aria-label="dashboard" class="relative flex items-center space-x-4 bg-gradient-to-r from-indigo-600 to-sky-400 px-4 py-3 text-white">
+                    <a href="/ExtendedDashboard" aria-label="dashboard" class="relative flex items-center space-x-4 bg-gradient-to-r from-indigo-600 to-sky-400 px-4 py-3 text-white">
                       <svg class="-ml-1 h-6 w-6" viewBox="0 0 24 24" fill="none">
                         <path d="M6 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8ZM6 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-1Z" class="fill-current text-cyan-400"></path>
                         <path d="M13 8a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2V8Z" class="fill-current text-cyan-200 group-hover:text-indigo-800"></path>
@@ -95,31 +95,3 @@
 </body>
 </html>
 
-<main class="flex-auto grid grid-cols-3 gap-10 grid-rows-2 h-screen">
-  <div class="bg-white rounded shadow-md my-5 ml-5 flex items-center justify-center">
-    <form method="post" action="" enctype="application/x-www-form-urlencoded">
-      <legend class="p-5 bg-white rounded-md shadow-md mb-5">Wähle einen Bewerber aus:</legend>
-      <select class="p-5 bg-white rounded-md shadow-md mb-5 min-w-[236.56px]" id="user_id" name="user_id">
-        {%for index in range(data['nachnamen']| length)%}
-          <option value="{{ data['ID'][index] }}">{{ data['nachnamen'][index] }} {{ data['vornamen'][index] }}</option>
-        {% endfor %}
-      </select>
-    </form>
-  </div>
-  <div class="bg-white rounded shadow-md my-5 relative overflow-hidden">
-    <canvas class="max-w-full max-h-full" id="donutChart"></canvas>
-  </div>
-  <div class="bg-white rounded shadow-md my-5 mr-5 relative overflow-hidden row-span-2">
-    <canvas class="max-w-full max-h-full" id="barChart"></canvas>
-  </div>
-  <div class="bg-white rounded shadow-md ml-5 mb-5 overflow-hidden">
-    <p class="text-3xl m-4">Test solved from:</p>
-    <p class="text-lg mx-4">Oskar</p>
-    <p class="text-3xl m-4">Date:</p>
-    <p class="text-lg mx-4">25.05.2023</p>
-  </div>
-  <div class="bg-white rounded shadow-md mb-5 relative overflow-hidden">
-    <canvas class="max-w-full max-h-full" id="radarChart"></canvas>
-  </div>
-  
-</main>
