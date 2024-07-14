@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figurenreihen Eignungstest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                fontFamily:{
+                    sans:['Arial']
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-100 py-8">
+    <div class="max-w-4xl mx-auto px-4">
+        <h1 class="text-3xl font-bold mb-4">Figurenreihen Eignungstest</h1>
+        <div id="question-container">
+            <!-- Hier werden die Fragen eingefügt -->
+        </div>
+        <button id="next-btn" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Nächste Frage
+        </button>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script>
+        // Array mit Fragen und Antworten
+        const questions = [{
+                question: "Welche Figur kommt als nächstes in der Reihe?",
+                image: "https://www.fibonicci.com/images/nonverbal/non-verbal-example.png",
+                answers: ["Option A", "Option B", "Option C", "Option D"],
+                correctAnswer: 1 // Index der korrekten Antwort
+            },
+            {
+                question: "Was ist die fehlende Figur?",
+                image: "https://www.fibonicci.com/images/test_images_2019/non-verbal-hard-test-2.png",
+                answers: ["Option A", "Option B", "Option C", "Option D"],
+                correctAnswer: 3
+            },
+            {
+                question: "Was kommt als nächstes in der Reihe?",
+                image: "https://www.fibonicci.com/images/test_images_2019/non-verbal-hard-test-7.png",
+                answers: ["Option A", "Option B", "Option C", "Option D"],
+                correctAnswer: 3
+            },
+            // Platz zum Fragen hinzufügen
+        ];
+
+        let currentQuestionIndex = 0;
+        const questionContainer = document.getElementById('question-container');
+        const nextButton = document.getElementById('next-btn');
+        const resultContainer = document.getElementById('result');
+
+        // Funktion, um HTML für eine Frage zu generieren
+        function renderQuestion(question) {
+            const questionHTML = `
+                <div class="mb-8">
+                    <img src="${question.image}" alt="Figurenreihe" class="mb-4">
+                    <p class="font-semibold">${question.question}</p>
+                    <div class="mt-2">
+                        ${question.answers.map((answer, index) => `
+                            <input type="radio" id="answer${index}" name="question" value="${index}">
+                            <label for="answer${index}" class="ml-2">${answer}</label><br>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            return questionHTML;
+        }
+
+        // Funktion, um die nächste Frage anzuzeigen
+        function showNextQuestion() {
+            if (currentQuestionIndex < questions.length) {
+                questionContainer.innerHTML = renderQuestion(questions[currentQuestionIndex]);
+                resultContainer.textContent = ''; // Zurücksetzen des Ergebnisfelds
+                currentQuestionIndex++;
+            } else {
+                questionContainer.innerHTML = '';
+                nextButton.style.display = 'none';
+                resultContainer.textContent = ''; // Entferne das Ergebnisfeld am Ende des Tests
+            }
+        }
+
+        // Funktion, um das Ergebnis zu überprüfen
+        function checkAnswer() {
+            const selectedAnswer = document.querySelector('input[name="question"]:checked');
+            if (!selectedAnswer) {
+                resultContainer.textContent = 'Bitte wählen Sie eine Antwort aus.';
+                return;
+            }
+            const selectedAnswerIndex = parseInt(selectedAnswer.value);
+            const currentQuestion = questions[currentQuestionIndex - 1];
+            if (selectedAnswerIndex === currentQuestion.correctAnswer) {
+                resultContainer.textContent = 'Richtig!';
+            } else {
+                resultContainer.textContent = 'Falsch! Die richtige Antwort ist: ' + currentQuestion.answers[currentQuestion.correctAnswer];
+            }
+        }
+
+        // Event-Listener für den "Nächste Frage" Button
+        nextButton.addEventListener('click', () => {
+            checkAnswer();
+            showNextQuestion();
+        });
+
+        // Zeige die erste Frage
+        showNextQuestion();
+    </script>
+</body>
+
+</html>
