@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                fontFamily:{
+                    sans: ['Arial']
+                }
+            }
+        }
+    </script>
+    <script src="{{url_for('static', filename='SendData.js')}}" defer></script>
+
+</head>
+<body class="flex min-h-screen items-center justify-center">
+    <div class="text-center p-10">
+        <p class="py-6 text-2xl">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <button id="Send" class="bg-white mr-5 p-5 rounded-lg shadow-md justify-center">Beenden</button>
+    </div>
+    
+</body>
+</html>
