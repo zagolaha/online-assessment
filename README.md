@@ -6,7 +6,7 @@ Diese WebApp soll eine neue Plattform für HR bieten, um Assessment-Tests für
 Bewerber durchzuführen.
 
 ### Wie startet man das Tool?
-`python app.py`. Flask muss installiert sein.
+`flask run`. Flask muss installiert sein.
 
 ### Architektur
 Die App ist funktional getrennt zwischen der Bewerber- und Admin-Seite. Bewerber
