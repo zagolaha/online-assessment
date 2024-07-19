@@ -3,56 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anmelden</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme:{
-                fontFamily:{
-                    sans:['Arial']
-                }
-            }
-        }
-    </script>
+    <title>Anmeldung</title>
     <style>
-        #error-message {
-            display: none;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h1 {
+            color: #1877f2;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #166fe5;
         }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-900 flex items-center justify-center h-screen">
-
-    <div id="login-page" class="bg-white p-12 rounded-lg shadow-lg w-full max-w-md mx-auto">
-        <h2 class="text-3xl font-semibold mb-6 text-center">Anmelden</h2>
-        <form id="login-form" onsubmit="event.preventDefault(); handleLogin();">
-            <div class="mb-6">
-                <label class="block text-lg font-medium mb-2" for="username">Benutzername</label>
-                <input class="w-full p-4 border rounded-lg text-lg" type="text" id="username" placeholder="Benutzername">
-            </div>
-            <div class="mb-6">
-                <label class="block text-lg font-medium mb-2" for="password">Passwort</label>
-                <input class="w-full p-4 border rounded-lg text-lg" type="password" id="password" placeholder="Passwort">
-            </div>
-            <div id="error-message" class="text-red-500 mb-6 text-center">Falscher Benutzername oder falsches Passwort.</div>
-            <button class="bg-blue-600 text-white px-6 py-3 rounded-lg w-full text-lg hover:bg-blue-700" type="submit">Anmelden</button>
+<body>
+    <div class="container">
+        <h1>Anmeldung</h1>
+        <form id="tokenForm">
+            <input type="text" id="token" name="token" placeholder="Enter your token" required>
+            <button type="submit">Submit</button>
         </form>
     </div>
 
     <script>
-        function handleLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            const correctUsername = 'testuser';
-            const correctPassword = 'password123';
-
-            if (username === correctUsername && password === correctPassword) {
-                window.location.href = 'https://www.google.com';
-            } else {
-                document.getElementById('error-message').style.display = 'block';
-            }
-        }
+        document.getElementById('tokenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var token = document.getElementById('token').value;
+            fetch('/validate_token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'token=' + encodeURIComponent(token)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/user_dashboard';
+                } else {
+                    alert('Invalid token. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
     </script>
-
 </body>
 </html>
