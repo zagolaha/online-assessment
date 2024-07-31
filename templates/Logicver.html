@@ -57,6 +57,11 @@
         const nextButton = document.getElementById('next-btn');
         const resultContainer = document.getElementById('result');
 
+        // Initialize localStorage variables
+        localStorage.setItem('musteraufgabe_richtig', '0');
+        localStorage.setItem('musteraufgabe_falsch', '0');
+        localStorage.setItem('musteraufgabe_unbearbeitet', questions.length.toString());
+
         // Funktion, um HTML für eine Frage zu generieren
         function renderQuestion(question) {
             const questionHTML = `
@@ -96,10 +101,18 @@
             }
             const selectedAnswerIndex = parseInt(selectedAnswer.value);
             const currentQuestion = questions[currentQuestionIndex - 1];
+            
+            let unbearbeitet = parseInt(localStorage.getItem('musteraufgabe_unbearbeitet'));
+            localStorage.setItem('musteraufgabe_unbearbeitet', (unbearbeitet - 1).toString());
+
             if (selectedAnswerIndex === currentQuestion.correctAnswer) {
                 resultContainer.textContent = 'Richtig!';
+                let richtig = parseInt(localStorage.getItem('musteraufgabe_richtig'));
+                localStorage.setItem('musteraufgabe_richtig', (richtig + 1).toString());
             } else {
                 resultContainer.textContent = 'Falsch! Die richtige Antwort ist: ' + currentQuestion.answers[currentQuestion.correctAnswer];
+                let falsch = parseInt(localStorage.getItem('musteraufgabe_falsch'));
+                localStorage.setItem('musteraufgabe_falsch', (falsch + 1).toString());
             }
         }
 

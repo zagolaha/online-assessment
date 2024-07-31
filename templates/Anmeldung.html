@@ -26,31 +26,34 @@
         <h2 class="text-3xl font-semibold mb-6 text-center">Anmelden</h2>
         <form id="login-form" onsubmit="event.preventDefault(); handleLogin();">
             <div class="mb-6">
-                <label class="block text-lg font-medium mb-2" for="username">Benutzername</label>
-                <input class="w-full p-4 border rounded-lg text-lg" type="text" id="username" placeholder="Benutzername">
+                <label class="block text-lg font-medium mb-2" for="token">Token</label>
+                <input class="w-full p-4 border rounded-lg text-lg" type="text" id="token" placeholder="Enter your token">
             </div>
-            <div class="mb-6">
-                <label class="block text-lg font-medium mb-2" for="password">Passwort</label>
-                <input class="w-full p-4 border rounded-lg text-lg" type="password" id="password" placeholder="Passwort">
-            </div>
-            <div id="error-message" class="text-red-500 mb-6 text-center">Falscher Benutzername oder falsches Passwort.</div>
+            <div id="error-message" class="text-red-500 mb-6 text-center">Invalid token.</div>
             <button class="bg-blue-600 text-white px-6 py-3 rounded-lg w-full text-lg hover:bg-blue-700" type="submit">Anmelden</button>
         </form>
     </div>
 
     <script>
         function handleLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const token = document.getElementById('token').value;
 
-            const correctUsername = 'testuser';
-            const correctPassword = 'password123';
-
-            if (username === correctUsername && password === correctPassword) {
-                window.location.href = 'https://www.google.com';
-            } else {
-                document.getElementById('error-message').style.display = 'block';
-            }
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token: token }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('user_id', data.user_id);
+                    window.location.href = '/LandingPage';
+                } else {
+                    document.getElementById('Login unsuccessful').style.display = 'block';
+                }
+            });
         }
     </script>
 

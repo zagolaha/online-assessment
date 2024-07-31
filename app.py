@@ -13,11 +13,10 @@ def index():
     global loggedIn
     loggedIn = False
     close_connection()
-    return render_template("Dashboard.html")
+    return render_template("Anmeldung.html")
 
-#Sobald die andern Siten stehen von Oskar und Hagen
-# @app.route('/Dashboard')
-# def index():
+#@app.route('/Dashboard')
+#def index():
 #     return render_template("Dashboard.html")
 
 @app.route('/get_data', methods=['POST','GET'])
@@ -160,7 +159,27 @@ def LandingPage():
             (user_id, keyValues[0], keyValues[1], keyValues[2]))
         db.commit()
         close_connection()
-    return render_template('LandingPage.html') 
+    return render_template('LandingPage.html') #
+
+@app.route('/Anmeldung', methods=['GET'])
+def Anmeldung():
+    return render_template("Anmeldung.html")
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.is_json:
+        data = request.get_json()
+        token = data.get('token')
+        db = getDB()
+        cur = db.execute('SELECT ID FROM User WHERE Token = ?', (token,))
+        user_id = cur.fetchone()
+        close_connection()
+        if user_id:
+            session['user_id'] = user_id[0]
+            return jsonify({'success': True, 'user_id': user_id[0]})
+        else:
+            return jsonify({'success': False})
+    return jsonify({'success': False})
 
 def getDB():
     db = getattr(g, '_database', None)
