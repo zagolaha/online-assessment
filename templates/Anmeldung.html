@@ -24,7 +24,7 @@
 
     <div id="login-page" class="bg-white p-12 rounded-lg shadow-lg w-full max-w-md mx-auto">
         <h2 class="text-3xl font-semibold mb-6 text-center">Anmelden</h2>
-        <form id="login-form" onsubmit="event.preventDefault(); handleLogin();">
+        <form id="login-form">
             <div class="mb-6">
                 <label class="block text-lg font-medium mb-2" for="token">Token</label>
                 <input class="w-full p-4 border rounded-lg text-lg" type="text" id="token" placeholder="Enter your token">
@@ -34,28 +34,7 @@
         </form>
     </div>
 
-    <script>
-        function handleLogin() {
-            const token = document.getElementById('token').value;
-
-            fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ token: token }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    localStorage.setItem('user_id', data.user_id);
-                    window.location.href = '/LandingPage';
-                } else {
-                    document.getElementById('Login unsuccessful').style.display = 'block';
-                }
-            });
-        }
-    </script>
+    <script src="{{ url_for('static', filename='anmeldung.js' ) }}"></script>
 
 </body>
 </html>
