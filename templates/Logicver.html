@@ -1,130 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Figurenreihen Eignungstest</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme:{
-                fontFamily:{
-                    sans:['Arial']
-                }
-            }
-        }
-    </script>
 </head>
-
 <body class="bg-gray-100 py-8">
     <div class="max-w-4xl mx-auto px-4">
         <h1 class="text-3xl font-bold mb-4">Figurenreihen Eignungstest</h1>
-        <div id="question-container">
-            <!-- Hier werden die Fragen eingefügt -->
+        <div id="question-container" class="mb-4">
+            <img id="question-image" src="" alt="Figurenreihe" class="mb-4">
+            <p id="question-text" class="font-semibold mb-2"></p>
+            <div id="answer-buttons">
+                <button onclick="selectAnswer(0)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2">Option A</button>
+                <button onclick="selectAnswer(1)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2">Option B</button>
+                <button onclick="selectAnswer(2)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2">Option C</button>
+                <button onclick="selectAnswer(3)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 mb-2">Option D</button>
+            </div>
         </div>
-        <button id="next-btn" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Nächste Frage
-        </button>
         <div id="result" class="mt-4"></div>
     </div>
-
-    <script>
-        // Array mit Fragen und Antworten
-        const questions = [{
-                question: "Welche Figur kommt als nächstes in der Reihe?",
-                image: "https://www.fibonicci.com/images/nonverbal/non-verbal-example.png",
-                answers: ["Option A", "Option B", "Option C", "Option D"],
-                correctAnswer: 1 // Index der korrekten Antwort
-            },
-            {
-                question: "Was ist die fehlende Figur?",
-                image: "https://www.fibonicci.com/images/test_images_2019/non-verbal-hard-test-2.png",
-                answers: ["Option A", "Option B", "Option C", "Option D"],
-                correctAnswer: 3
-            },
-            {
-                question: "Was kommt als nächstes in der Reihe?",
-                image: "https://www.fibonicci.com/images/test_images_2019/non-verbal-hard-test-7.png",
-                answers: ["Option A", "Option B", "Option C", "Option D"],
-                correctAnswer: 3
-            },
-            // Platz zum Fragen hinzufügen
-        ];
-
-        let currentQuestionIndex = 0;
-        const questionContainer = document.getElementById('question-container');
-        const nextButton = document.getElementById('next-btn');
-        const resultContainer = document.getElementById('result');
-
-        // Initialize localStorage variables
-        localStorage.setItem('musteraufgabe_richtig', '0');
-        localStorage.setItem('musteraufgabe_falsch', '0');
-        localStorage.setItem('musteraufgabe_unbearbeitet', questions.length.toString());
-
-        // Funktion, um HTML für eine Frage zu generieren
-        function renderQuestion(question) {
-            const questionHTML = `
-                <div class="mb-8">
-                    <img src="${question.image}" alt="Figurenreihe" class="mb-4">
-                    <p class="font-semibold">${question.question}</p>
-                    <div class="mt-2">
-                        ${question.answers.map((answer, index) => `
-                            <input type="radio" id="answer${index}" name="question" value="${index}">
-                            <label for="answer${index}" class="ml-2">${answer}</label><br>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            return questionHTML;
-        }
-
-        // Funktion, um die nächste Frage anzuzeigen
-        function showNextQuestion() {
-            if (currentQuestionIndex < questions.length) {
-                questionContainer.innerHTML = renderQuestion(questions[currentQuestionIndex]);
-                resultContainer.textContent = ''; // Zurücksetzen des Ergebnisfelds
-                currentQuestionIndex++;
-            } else {
-                questionContainer.innerHTML = '';
-                nextButton.style.display = 'none';
-                resultContainer.textContent = ''; // Entferne das Ergebnisfeld am Ende des Tests
-            }
-        }
-
-        // Funktion, um das Ergebnis zu überprüfen
-        function checkAnswer() {
-            const selectedAnswer = document.querySelector('input[name="question"]:checked');
-            if (!selectedAnswer) {
-                resultContainer.textContent = 'Bitte wählen Sie eine Antwort aus.';
-                return;
-            }
-            const selectedAnswerIndex = parseInt(selectedAnswer.value);
-            const currentQuestion = questions[currentQuestionIndex - 1];
-            
-            let unbearbeitet = parseInt(localStorage.getItem('musteraufgabe_unbearbeitet'));
-            localStorage.setItem('musteraufgabe_unbearbeitet', (unbearbeitet - 1).toString());
-
-            if (selectedAnswerIndex === currentQuestion.correctAnswer) {
-                resultContainer.textContent = 'Richtig!';
-                let richtig = parseInt(localStorage.getItem('musteraufgabe_richtig'));
-                localStorage.setItem('musteraufgabe_richtig', (richtig + 1).toString());
-            } else {
-                resultContainer.textContent = 'Falsch! Die richtige Antwort ist: ' + currentQuestion.answers[currentQuestion.correctAnswer];
-                let falsch = parseInt(localStorage.getItem('musteraufgabe_falsch'));
-                localStorage.setItem('musteraufgabe_falsch', (falsch + 1).toString());
-            }
-        }
-
-        // Event-Listener für den "Nächste Frage" Button
-        nextButton.addEventListener('click', () => {
-            checkAnswer();
-            showNextQuestion();
-        });
-
-        // Zeige die erste Frage
-        showNextQuestion();
-    </script>
+    <script src="{{ url_for('static', filename='logicver.js') }}"></script>
 </body>
-
 </html>
