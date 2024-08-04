@@ -165,6 +165,14 @@ def LandingPage():
 def Anmeldung():
     return render_template("Anmeldung.html")
 
+@app.route("/Timed_KeySelects")
+def Timed_KeySelects():
+    return render_template("timed_keyselects.html")
+
+@app.route("/Timed_KeySelects_Closing")
+def Timed_KeySelects_Closing():
+    return render_template("timed_keyselects_closing.html")
+
 @app.route('/login', methods=['POST'])
 def login():
     if request.is_json:
