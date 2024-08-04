@@ -21,27 +21,27 @@
     <div id="container" class="flex items-center justify-center h-screen">
         <div id="startingSection" class="px-64 text-center">
             <p>Im folgenden Test sehen Sie verschiedene Schlüssel mit unterschiedlicher Anzahl
-                an Zähnen, sowie ein Beispiel. Wählen Sie alle Felder an, die die gleiche Anzahl haben.
+                an Zähnen. Wählen Sie alle Felder an, die die gleiche Anzahl haben.
                 Der Test ist zeitlich beschränkt. Nach abgelaufener Zeit werden automatisch neue Felder
                 geladen. Der Test beendet sich automatisch. Klicken Sie auf 'Start', um zu beginnen.
             </p>
-            <button onclick="startup()"
-                    class="m-4 px-4 py-1 bg-gray-200 border border-gray-400 rounded-md text-gray-800">Start</button>
+            <button onclick="start_test()"
+                    class="m-4 px-4 py-1 bg-gray-200 border border-gray-400 rounded-md">
+                Start
+            </button>
         </div>
 
         <div id="timerPanel" class="fixed top-0 right-0 bg-yellow-300">
-            <p id="timer" class="px-4 py-1 text-xl font-bold"></p>
+            <p id="timer" class="px-4 py-1 text-lg font-bold"></p>
         </div>
 
         <div id="gridPanel" hidden>
             <p class="text-center">
-                Wählen Sie alle Schlüssel mit <strong><span id="target">{{ 2 }}</span> Zähnen</strong> aus.
+                Wählen Sie alle Schlüssel mit <strong><span id="teeth"></span> Zähnen</strong> aus.
             </p>
-            <div class="grid grid-rows-6 grid-cols-9">
-                <!-- assign each field a random key, flip some horizontally -->
+            <div class="grid grid-rows-6 grid-cols-9 scale-90">
                 {% for i in range(6*9) %}
-                <img id="{{ i }}" src="" class="p-2 hover:blur-sm
-                        {{ '-scale-x-100' if (range(2) | random)==1 }}">
+                    <img id="{{ i }}" class="p-1" data-teeth="">
                 {% endfor %}
             </div>
         </div>
