@@ -1,4 +1,5 @@
 function send(){
+    let userID = localStorage.getItem('user_id');
     let personalitycategories = ["Pünktlich","Durchsetzungsfähig","Aufgabenorientiert"," Ruhig", "Direkt","Freundlich", "Spontan", "Impulsiv"];
     let personalitycategoriesValues = [];
     for(let i = 0; i < personalitycategories.length; i++){
@@ -10,7 +11,7 @@ function send(){
             personalitycategoriesValues[i] = ("");
         }
     }
-    let musteraufgabecategories = ["Richtig", "Falsch", "Unbearbeitet"];
+    let musteraufgabecategories = ["musteraufgabe_richtig", "musteraufgabe_falsch", "musteraufgabe_unbearbietet"];
     let musteraufgabecategoriesValues = [];
     for(let i = 0; i < musteraufgabecategories.length; i++){
         let value = localStorage.getItem(`${musteraufgabecategories[i]}`)
@@ -21,26 +22,32 @@ function send(){
             musteraufgabecategoriesValues[i] = ("");
         }
     }
-    let keycategories = ["Richtig", "Falsch", "Unbearbeitet"];
-    let keyCategoriesValues = [];
-    for(let i = 0; i < keycategories.length; i++){
-        let value = localStorage.getItem(`${keycategories[i]}`)
-        if(value != null){
-            keyCategoriesValues[i] = value;
-        }
-        else{
-            keyCategoriesValues[i] = ("");
-        }
+    let schlüsselaufgabeValues = [];
+    let value = localStorage.getItem('Timed_KeySelects');
+    if(value != null){
+        schlüsselaufgabeValues[0] = value * 100;
+        schlüsselaufgabeValues[1] = 100 - value;
     }
+    else{
+        keyValue = ("");
+    }
+    
     fetch('/LandingPage',{
         method: "POST",
         headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({points:personalitycategoriesValues, values:musteraufgabecategoriesValues, keyValues: keyCategoriesValues})
+        body: JSON.stringify({id:userID, points:personalitycategoriesValues, values:musteraufgabecategoriesValues, keyValues: schlüsselaufgabeValues})
     });
 };
+
+function clearLocalStorage(){
+    let user_id = localStorage.getItem('user_id');
+    localStorage.clear();
+    localStorage.setItem('user_id', user_id)
+}
 document.addEventListener("DOMContentLoaded", function(){
 send();
 });
 document.getElementById('Send').addEventListener('click', function(){
-    window.location.href = "/";
+    clearLocalStorage();
+    window.location.href = "/Dashboard";
 });
