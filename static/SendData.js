@@ -32,7 +32,7 @@ function send(){
         keyValue = ("");
     }
     
-    fetch('/LandingPage',{
+    fetch('/ClosingPage',{ //NOTE(Hagen): is this the right endpoint??
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify({id:userID, points:personalitycategoriesValues, values:musteraufgabecategoriesValues, keyValues: schlüsselaufgabeValues})

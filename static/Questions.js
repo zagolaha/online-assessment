@@ -121,7 +121,7 @@ function end(){
         }
         c++;
     }
-    window.location.href = "/LandingPage"; 
+    window.location.href = "/ClosingPage"; 
 };
 
 

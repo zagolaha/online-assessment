@@ -14,8 +14,8 @@ function handleLogin() {
         console.log('Server response:', data);
         if (data.success) {
             localStorage.setItem('user_id', data.user_id);
-            console.log('Redirecting to LandingPage');
-            window.location.href = '/LandingPage';
+            console.log('Redirecting to ClosingPage');
+            window.location.href = '/ClosingPage';
         } else {
             const errorMessage = document.getElementById('error-message');
             if (errorMessage) {

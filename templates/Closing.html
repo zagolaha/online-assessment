@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                fontFamily:{
+                    sans: ['Arial']
+                }
+            }
+        }
+    </script>
+    <script src="{{url_for('static', filename='SendData.js')}}" defer></script>
+
+</head>
+<body class="flex flex-col min-h-screen items-center justify-center">
+    <div class="text-center px-24 py-4">
+        <p class="text-lg font-bold">Vielen Dank für Ihre Teilnahme!</p>
+        <p>Sie haben den Bewerbertest hiermit abgeschlossen. Für Ihre Zeit und Engagement
+            möchten wir uns schonmal bedanken. Ihre Ergebnisse werden nun sorgfältig geprüft,
+            und wir werden uns in Kürze mit Ihnen in Verbindung setzen, um die nächsten Schritte
+            zu besprechen. Sollten Sie in der Zwischenzeit Fragen haben, zögern Sie bitte nicht,
+            uns zu kontaktieren. Wir stehen Ihnen gerne jederzeit zur Verfügung.
+        </p>
+    </div>
+    <button id="Send" class="bg-white mr-5 p-5 rounded-lg shadow-md justify-center">
+        Beenden
+    </button>
+</body>
+</html>

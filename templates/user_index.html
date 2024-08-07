@@ -1,14 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Assessment</title>
-	<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/static/jquery-3.7.1.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme:{
+                fontFamily:{
+                    sans: ['Arial']
+                }
+            }
+        }
+    </script>
 </head>
-<body class="h-screen flex items-center justify-center overflow-y-hidden">
-	<iframe class="w-4/5 h-4/5 bg-gray-50 border rounded-md">
-		<!-- content goes here -->
-	</iframe>
+<body class="h-screen flex items-center justify-center ">
+    <div class="px-64">
+        <p class="mb-2"><strong>Herzlich willkommen zum Auswahltest!</strong></p>
+        <p class="mb-2">Wir freuen uns, dass Sie sich die Zeit nehmen, an unserem Bewerbungsprozess
+        teilzunehmen. In den folgenden Tests werden wir Ihre verschiedenen Fähigkeiten und
+        Kompetenzen genauer unter die Lupe nehmen. Diese Tests sind darauf ausgelegt, Ihre Eignung
+        für die ausgeschriebene Position zu bewerten.<p>
+        <p class="mb-2">Bitte nehmen Sie sich die nötige Zeit und Ruhe, um die Aufgaben sorgfältig zu
+        bearbeiten. Jeder Test ist ein wichtiger Baustein, um ein vollständiges Bild Ihrer
+        Fähigkeiten zu erhalten.</p>
+        <p class="mb-2">Um zu starten, klicken Sie einfach auf die untenstehenden Links. Jeder Link führt Sie zu
+        einem spezifischen Test, der einen bestimmten Bereich Ihrer Kenntnisse und Fertigkeiten
+        abdeckt.</p>
+        <p class="mb-2">Wir wünschen Ihnen viel Erfolg!</p>
+
+        <ul class="list-disc pl-4">
+			<!-- TODO(Hagen): do this procedurally -->
+            <li><a id="0" href="{{ urls[0] }}" class="underline text-blue-700">
+                Persönlichkeitstest
+            </a></li>
+			<li><a id="1" href="{{ urls[1] }}" class="underline text-blue-700">
+                Muster vervollständigen
+            </a></li>
+            <li><a id="2" href="{{ urls[2] }}" class="underline text-blue-700">
+                Zeitaufgabe
+            </a></li>
+        </ul>
+    </div>
+
+    <script>
+		// TODO(Hagen): track whether a test has been solved and if so, hide it
+        $(function() {
+            let solved_tests = localStorage.getItem("solved_tests");
+            if (solved_tests === null) {
+				solved_tests = [0, 0, 0];
+				localStorage.setItem("solved_tests", JSON.stringify(solved_tests));
+				return;
+			}
+
+            $("li").each(function(index, elem) {
+                if (false) $(this).hide();
+            });
+        });
+    </script>
 </body>
 </html>

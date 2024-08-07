@@ -150,8 +150,8 @@ def LogIn():
 def Persoenlichkeit():
     return render_template("Persoenlichkeit.html")
 
-@app.route('/LandingPage', methods=['GET', 'POST'])
-def LandingPage():
+@app.route('/ClosingPage', methods=['GET', 'POST'])
+def ClosingPage():
     if request.is_json:
         data = request.get_json()
         user_id = data.get('id')
@@ -167,7 +167,7 @@ def LandingPage():
             cur.execute('INSERT INTO Schlüsselaufgabe (ID, Richtig, Unbearbeitet) VALUES (?,?,?)', 
                 (user_id, keyValues[0], keyValues[1]))
             db.commit()
-    return render_template('LandingPage.html')
+    return render_template('ClosingPage.html')
 
 # @app.route('/save_results', methods=['POST'])
 # def save_results():
@@ -194,6 +194,15 @@ def Timed_KeySelects():
 @app.route("/Timed_KeySelects_Closing")
 def Timed_KeySelects_Closing():
     return render_template("timed_keyselects_closing.html")
+
+@app.route("/Home")
+def Home():
+    urls = [url_for("Persoenlichkeit"), url_for("Logicver"), url_for("Timed_KeySelects")]
+    return render_template("user_index.html", urls=urls)
+
+@app.route("/Logicver")
+def Logicver():
+    return render_template("Logicver.html")
 
 @app.route('/login', methods=['POST'])
 def login():
