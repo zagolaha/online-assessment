@@ -1,6 +1,11 @@
 let donutChart;
 function initializeChart2(){
-    fetch('/get_data')
+    const id = localStorage.getItem('user_id')
+    fetch('/Test_Results',{
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({id:id})
+    })
     .then(response => response.json())
     .then(dataDonut => {
         const DoughnutTarget = {
@@ -52,9 +57,9 @@ function initializeChart2(){
         };
         
         const data = {
-            labels: ['Richtig', 'Falsch', 'Unbearbeitet'],
+            labels: ['Richtig', 'Unbearbeitet'],
             datasets:[{
-                data: dataDonut.pattern,
+                data: dataDonut.key,
                 backgroundColor:['#FF6384', '#36A2EB', '#FFCE56'],
                 hoverBackgroundColor:['#FF6384', '#36A2EB', '#FFCE56']
             }]
@@ -92,7 +97,7 @@ function initializeChart2(){
 };
 function updateChart2(){
     const data = document.getElementById('user_id').value;
-    fetch('/get_data',{
+    fetch('/Test_Results',{
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify({id:data})

@@ -1,6 +1,11 @@
 let barChart;
 function initializeChart1(){
-    fetch('/get_data')
+    const id = localStorage.getItem('user_id')
+    fetch('/Test_Results',{
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({id:id})
+    })
     .then(response => response.json())
     .then(dataBar =>{
         const targetPlugin = {
@@ -31,7 +36,7 @@ function initializeChart1(){
             labels: ['Nein', 'Ja', 'Vllt'],
             datasets: [{
                 label: 'Data',
-                data: dataBar.key,
+                data: dataBar.pattern,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
@@ -80,7 +85,7 @@ function initializeChart1(){
 
 function updateChart1(){
     const data = document.getElementById('user_id').value;
-    fetch('/get_data',{
+    fetch('/Test_Results',{
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify({id:data})

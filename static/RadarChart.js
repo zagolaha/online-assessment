@@ -1,6 +1,11 @@
 let radarChart;
 function initializeChart(){
-    fetch('/get_data')
+    const id = localStorage.getItem('user_id')
+    fetch('/Test_Results',{
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({id:id})
+    })
     .then(response => response.json())
     .then(dataRadar => {
         const data1 = {
@@ -41,7 +46,7 @@ function initializeChart(){
 };
 function updateChart(){
     const data = document.getElementById('user_id').value;
-    fetch('/get_data',{
+    fetch('/Test_Results',{
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify({id:data})

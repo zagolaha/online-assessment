@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
     const id = document.getElementById('user_id').value;
-    fetch('/get_data',{
+    fetch('/Test_Results',{
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({id:id})
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 document.addEventListener("change", function(){
     const id = document.getElementById('user_id').value;
-    fetch('/get_data',{
+    fetch('/Test_Results',{
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({id:id})
