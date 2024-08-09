@@ -33,7 +33,7 @@ function initializeChart1(){
         };
         
         const data_barchart = {
-            labels: ['Nein', 'Ja', 'Vllt'],
+            labels: ['Nein', 'Ja', 'Unbearbietet'],
             datasets: [{
                 label: 'Data',
                 data: dataBar.pattern,
@@ -50,7 +50,7 @@ function initializeChart1(){
             plugins: {
                 title: {
                     display: true,
-                    text: 'Placeholder'
+                    text: 'Musteraufgabe'
                 },
                 legend: {
                     display: false,
@@ -92,7 +92,7 @@ function updateChart1(){
     })
     .then(response => response.json())
     .then(dataBar => {
-        barChart.data.datasets[0].data = dataBar.key;
+        barChart.data.datasets[0].data = dataBar.pattern;
         barChart.update()
     })
 }

@@ -7,96 +7,64 @@ app = Flask(__name__, static_url_path='/static')
 app.secret_key = '123'
 DATABASE = "Datenbank.db"
 
+
 @app.route('/static/<path:filename>')
 def send_static(filename):
     return send_from_directory('static', filename)
 
-loggedIn = False
 
 @app.route('/')
 def index():
-    global loggedIn
-    loggedIn = False
+    session.pop('profile_loaded', None)
+    session.pop('loggedIn', False)
     close_connection()
     return render_template("Anmeldung.html")
 
 @app.route('/Dashboard')
 def Dashboard():
+    session.pop('profile_loaded', None)
+    session.pop('loggedIn', False)
     return render_template("Dashboard.html")
 
 @app.route('/Test_Results', methods=['POST','GET'])
 def Data():
-    global loggedIn 
     db = getDB()
-    standart = db.execute('SELECT ID FROM User ORDER BY ROWID ASC')
-    standart_user_id = standart.fetchone()
+
     if request.is_json:
-            data = request.get_json()
-            user_id = data.get('id')
-    # elif loggedIn:
-    #     print("test")
-    #     user_id = standart_user_id[0]
-    else: 
-        user_id = standart_user_id[0]
-    cur = db.execute('SELECT Pünktlich, Durchsetzungsfähig, Aufgabenorientiert, Ruhig, Direkt, Freundlich, Spontan, Impulsiv FROM Persoenlichkeit WHERE ID = ?', (user_id,))
-    personality = cur.fetchone()
-    cur = db.execute('SELECT Richtig, Unbearbeitet FROM Schlüsselaufgabe WHERE ID =?', (user_id,))
-    key = cur.fetchone()
-    cur = db.execute('SELECT Richtig, Falsch, Unbearbeitet FROM Musteraufgabe WHERE ID =?',(user_id,))
-    pattern = cur.fetchone()
+        data = request.get_json()
+        user_id = data.get('id')
+        if session.get('loggedIn'):
+            if not session.get('profile_loaded'):
+                user_id = load_standart_profile(db)
+                session['profile_loaded'] = True
+
+    personality, key, pattern = load_results(user_id, db)
+    test_requirement, label = load_status(user_id, db,personality, pattern, key)
+
     data = {
         'personality': list(personality) if personality else [0,0,0,0,0,0,0,0],
         'key': list(key) if key else [0,0,0],
         'pattern': list(pattern) if pattern else [0,0,0],
-        'label': "Finished" if personality and key and pattern else "Not started" if not personality and not key and not pattern else "Not finished"
+        'label': label,
+        'test_status': test_requirement
     }
     close_connection()
     return jsonify(data)
 
 @app.route('/ManageUsers', methods= ['POST', 'GET'])
 def ManageUsers():
-    if loggedIn:
+    session.pop('profile_loaded', None)
+    if session.get('loggedIn'):
         db = getDB()
         cur = db.cursor()
         #Add User
         pressed_button = request.form.get('Button')
         if request.method == "POST" and pressed_button == "addButton":
-            name = request.form.get('nachname')
-            firstname = request.form.get('vorname')
-            personality = request.form.get('personality')
-            pattern = request.form.get('pattern')
-            key = request.form.get('key')
-            if not personality:
-                personality = "0"
-            if not pattern:
-                pattern = "0"
-            if not key:
-                key = "0"
-
-            tokens = cur.execute('SELECT (Token) FROM User')
-            tokens = tokens.fetchall()
-            tokens_values = [row[0] for row in tokens]
-            token = generate_token_ID()
-            while token in tokens_values:
-                token = generate_token_ID()
-
-            ids = cur.execute('SELECT (ID) FROM User')
-            ids = ids.fetchall()
-            id_values = [row[0] for row in ids]
-            id = generate_token_ID()
-            while id in id_values:
-                id = generate_token_ID()
-
-            cur.execute('INSERT INTO USER (Nachname, Vorname, Token, ID, Persönlichkeitstest, Musteraufgabe, Schlüsselaufgabe) VALUES(?,?,?,?,?,?,?)', (name, firstname, token, id,personality,pattern,key))
-            db.commit()
+            add_User(db,cur)
         #Delete User
         if pressed_button == "deleteButton" and request.method == "POST":
-            selected_user = request.form.get('user_id')
-            cur.execute('DELETE FROM User WHERE ID = ?', (selected_user,))
-            cur.execute('DELETE FROM Persoenlichkeit WHERE ID = ?', (selected_user,))
-            cur.execute('DELETE FROM Musteraufgabe WHERE ID = ?', (selected_user,))
-            cur.execute('DELETE FROM Schlüsselaufgabe WHERE ID = ?', (selected_user,))
-            db.commit()
+           delete_User(db,cur)
+        
         values = cur.execute('SELECT Nachname, Vorname, ID FROM User')
         data = values.fetchall()
         nachnamen = [row[0] for row in data]
@@ -113,7 +81,7 @@ def ManageUsers():
 
 @app.route('/ExtendedDashboard')
 def ExtendedDashboard():
-    if loggedIn:
+    if session.get('loggedIn'):
         db = getDB()
         cur = db.execute('SELECT Nachname, Vorname, ID FROM User')
         data = cur.fetchall()
@@ -131,7 +99,6 @@ def ExtendedDashboard():
 
 @app.route('/LogIn', methods=['GET', 'POST'])
 def LogIn():
-    global loggedIn
     if request.is_json:
         data = request.get_json()
         username = data.get('username')
@@ -140,7 +107,7 @@ def LogIn():
         cur = db.execute('SELECT Passwort FROM Ausbilder WHERE EMail = ?', (username,))
         saved_password = cur.fetchone()
         if saved_password and saved_password[0] == hashed_pw:
-            loggedIn = True
+            session['loggedIn'] = True
             close_connection()
             return redirect(url_for('ExtendedDashboard'))
     close_connection()
@@ -158,30 +125,9 @@ def ClosingPage():
         values = data.get('points', [])
         patternValues = data.get('values', [])
         keyValues = data.get('keyValues', [])
-        with getDB() as db:
-            cur = db.cursor()
-            cur.execute('INSERT INTO Persoenlichkeit (ID, Pünktlich, Durchsetzungsfähig, Aufgabenorientiert, Ruhig, Direkt, Freundlich, Spontan, Impulsiv) VALUES(?,?,?,?,?,?,?,?,?)',
-                (user_id, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]))
-            cur.execute('INSERT INTO Musteraufgabe (ID, Richtig, Falsch, Unbearbeitet) VALUES (?,?,?,?)', 
-                (user_id, patternValues[0], patternValues[1], patternValues[2]))
-            cur.execute('INSERT INTO Schlüsselaufgabe (ID, Richtig, Unbearbeitet) VALUES (?,?,?)', 
-                (user_id, keyValues[0], keyValues[1]))
-            db.commit()
-    return render_template('ClosingPage.html')
-
-# @app.route('/save_results', methods=['POST'])
-# def save_results():
-#     if request.is_json:
-#         data = request.get_json()
-#         user_id = session.get('user_id')
-#         db = getDB()
-#         cur = db.cursor()
-#         cur.execute('INSERT INTO Musteraufgabe (ID, Richtig, Falsch, Unbearbeitet) VALUES (?,?,?,?)', 
-#             (user_id, data['richtig'], data['falsch'], data['unbearbeitet']))
-#         db.commit()
-#         close_connection()
-#         return jsonify({'success': True})
-#     return jsonify({'success': False})
+        
+        insert_Results(user_id,values,patternValues, keyValues)
+    return render_template('Closing.html')
 
 @app.route('/Anmeldung', methods=['GET'])
 def Anmeldung():
@@ -244,6 +190,113 @@ def generate_token_ID():
     char = string.ascii_letters + string.digits
     random_char = ''.join(random.choice(char) for i in range (6))
     return random_char
+
+def load_standart_profile(db):
+    standart = db.execute('SELECT ID FROM User ORDER BY ROWID ASC')
+    standart_user_id = standart.fetchone()
+    return standart_user_id[0]
+
+def load_results(user_id, db):
+    cur = db.execute('SELECT Pünktlich, Durchsetzungsfähig, Aufgabenorientiert, Ruhig, Direkt, Freundlich, Spontan, Impulsiv FROM Persoenlichkeit WHERE ID = ?', (user_id,))
+    personality = cur.fetchone()
+    cur = db.execute('SELECT Richtig, Unbearbeitet FROM Schlüsselaufgabe WHERE ID =?', (user_id,))
+    key = cur.fetchone()
+    cur = db.execute('SELECT Richtig, Falsch, Unbearbeitet FROM Musteraufgabe WHERE ID =?',(user_id,))
+    pattern = cur.fetchone()
+    return personality, key, pattern
+
+def load_status(user_id, db,personality, pattern, key):
+    cur = db.execute('SELECT Persönlichkeitstest, Musteraufgabe, Schlüsselaufgabe FROM user WHERE ID = ?', (user_id,))
+    test_requirements = cur.fetchone()
+
+    test_requirement = {
+    'persoenlichkeitstest': "Not required",
+    'musteraufgabe': "Not required",
+    'schluesselaufgabe': "Not required"
+    }
+
+    test_status = {
+    'persoenlichkeitstest': "Not finished",
+    'musteraufgabe': "Not finished",
+    'schluesselaufgabe': "Not finished"  
+    }
+
+    if test_requirements:
+        if test_requirements[0] == 1:
+            test_requirement['persoenlichkeitstest'] = "Required"
+            if personality:
+                test_status['persoenlichkeitstest'] = "Finished"
+        if test_requirements[1] == 1:
+            test_requirement['musteraufgabe'] = "Required"
+            if pattern:
+                test_status['musteraufgabe'] = "Finished"
+        if test_requirements[2] == 1:
+            test_requirement['schluesselaufgabe'] = "Required"
+            if key:
+                test_status['schluesselaufgabe'] = "Finished"
+
+    all_required_finished = all(
+        test_status[test] == "Finished" 
+        for test in test_status 
+        if test_requirement[test] == "Required"
+    )
+
+    if all_required_finished:
+        label = "Finished"
+    elif all(test_requirement[test] == "Not required" for test in test_requirement):
+        label = "Not required"
+    else:
+        label = "Not finished"
+    return test_requirement, label
+
+def add_User(db, cur):
+    name = request.form.get('nachname')
+    firstname = request.form.get('vorname')
+    personality = request.form.get('personality')
+    pattern = request.form.get('pattern')
+    key = request.form.get('key')
+    if not personality:
+        personality = "0"
+    if not pattern:
+        pattern = "0"
+    if not key:
+        key = "0"
+
+    tokens = cur.execute('SELECT (Token) FROM User')
+    tokens = tokens.fetchall()
+    tokens_values = [row[0] for row in tokens]
+    token = generate_token_ID()
+    while token in tokens_values:
+        token = generate_token_ID()
+
+    ids = cur.execute('SELECT (ID) FROM User')
+    ids = ids.fetchall()
+    id_values = [row[0] for row in ids]
+    id = generate_token_ID()
+    while id in id_values:
+        id = generate_token_ID()
+
+    cur.execute('INSERT INTO USER (Nachname, Vorname, Token, ID, Persönlichkeitstest, Musteraufgabe, Schlüsselaufgabe) VALUES(?,?,?,?,?,?,?)', (name, firstname, token, id,personality,pattern,key))
+    db.commit()
+
+def delete_User(db, cur):
+    selected_user = request.form.get('user_id')
+    cur.execute('DELETE FROM User WHERE ID = ?', (selected_user,))
+    cur.execute('DELETE FROM Persoenlichkeit WHERE ID = ?', (selected_user,))
+    cur.execute('DELETE FROM Musteraufgabe WHERE ID = ?', (selected_user,))
+    cur.execute('DELETE FROM Schlüsselaufgabe WHERE ID = ?', (selected_user,))
+    db.commit()
+
+def insert_Results(user_id, values, patternValues, keyValues):
+        with getDB() as db:
+            cur = db.cursor()
+            cur.execute('INSERT OR REPLACE INTO Persoenlichkeit (ID, Pünktlich, Durchsetzungsfähig, Aufgabenorientiert, Ruhig, Direkt, Freundlich, Spontan, Impulsiv) VALUES(?,?,?,?,?,?,?,?,?)',
+                (user_id, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]))
+            cur.execute('INSERT OR REPLACE INTO Musteraufgabe (ID, Richtig, Falsch, Unbearbeitet) VALUES (?,?,?,?)', 
+                (user_id, patternValues[0], patternValues[1], patternValues[2]))
+            cur.execute('INSERT OR REPLACE INTO Schlüsselaufgabe (ID, Richtig, Unbearbeitet) VALUES (?,?,?)', 
+                (user_id, keyValues[0], keyValues[1]))
+            db.commit()
 
 if __name__ == '__main__':
     app.run(debug=True)
