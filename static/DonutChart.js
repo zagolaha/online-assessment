@@ -40,7 +40,7 @@ function initializeChart2(){
                 ctx.fillStyle = 'black';
                 ctx.textAlign = 'center';
                 ctx.baseline = 'middle';
-                ctx.fillText('x / 60',x,y)
+                ctx.fillText('Zielwert: 65',x,y)
         
                 ctx.translate(x,y);
                 //PLatzierung dann
@@ -70,7 +70,7 @@ function initializeChart2(){
             plugins:{
                 title:{
                     display: true,
-                    text:'Placeholder'
+                    text:'Schlüsselaufgabe'
                 },
                 legend:{
                     display: true,
@@ -83,7 +83,7 @@ function initializeChart2(){
                     }
                 },
                 doughnutTarget:{
-                    pointerTarget: 10
+                    pointerTarget: 65
                 }
             }
         };
@@ -104,7 +104,7 @@ function updateChart2(){
     })
     .then(response => response.json())
     .then(dataDonut => {
-        donutChart.data.datasets[0].data = dataDonut.pattern;
+        donutChart.data.datasets[0].data = dataDonut.key;
         donutChart.update()
     })
 };

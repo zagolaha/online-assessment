@@ -26,13 +26,13 @@ function send(){
     let value = localStorage.getItem('Timed_KeySelects');
     if(value != null){
         schlüsselaufgabeValues[0] = value * 100;
-        schlüsselaufgabeValues[1] = 100 - value;
+        schlüsselaufgabeValues[1] = 100 - (value*100);
     }
     else{
         keyValue = ("");
     }
     
-    fetch('/ClosingPage',{ //NOTE(Hagen): is this the right endpoint??
+    fetch('/ClosingPage',{
         method: "POST",
         headers: {"Content-Type" : "application/json"},
         body: JSON.stringify({id:userID, points:personalitycategoriesValues, values:musteraufgabecategoriesValues, keyValues: schlüsselaufgabeValues})
