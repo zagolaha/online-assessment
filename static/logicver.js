@@ -44,41 +44,40 @@ document.addEventListener('DOMContentLoaded', function() {
         if (index === questions[currentQuestionIndex].correctAnswer) {
             const richtig = parseInt(localStorage.getItem('musteraufgabe_richtig'));
             localStorage.setItem('musteraufgabe_richtig', (richtig + 1).toString());
-            resultContainer.textContent = 'Richtig!';
         } else {
             const falsch = parseInt(localStorage.getItem('musteraufgabe_falsch'));
             localStorage.setItem('musteraufgabe_falsch', (falsch + 1).toString());
-            resultContainer.textContent = 'Falsch!';
         }
 
         currentQuestionIndex++;
-        displayNextQuestion();
+        if (currentQuestionIndex === 3) {
+            showCompletionMessage();
+        } else {
+            displayNextQuestion();
+        }
     }
 
     function sendResults() {
-        const data = {
-            richtig: localStorage.getItem('musteraufgabe_richtig'),
-            falsch: localStorage.getItem('musteraufgabe_falsch'),
-            unbearbeitet: localStorage.getItem('musteraufgabe_unbearbeitet')
-        };
-
-        fetch('/save_results', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
+        console.log('Test completed');
+        document.getElementById('question-container').innerHTML = 'Test beendet. Vielen Dank!';
+        setTimeout(() => {
             window.location.href = 'https://www.google.com';
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        }, 3000);
+    }
+
+    function showCompletionMessage() {
+        const container = document.getElementById('question-container');
+        container.innerHTML = `
+            <p class="mb-4">Sie haben das Modul erfolgreich abgeschlossen. Klicken Sie unten, um zurückzusetzen.</p>
+            <button onclick="returnToOverview()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Zurück zur Übersicht</button>
+        `;
+    }
+
+    window.returnToOverview = function() {
+        window.location.href = '/Home';
     }
 
     displayNextQuestion();
 });
+
 console.log("logicver.js loaded and running");
