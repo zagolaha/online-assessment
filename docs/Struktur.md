@@ -32,3 +32,8 @@ reduzierten Dashboard.
 
 Da der Test auf Tablets laufen sollen, die bei einem Bewerbertag ausgegeben
 werden, wird auf Responsive Design verzichtet.
+
+### Erstellen eines Ausbilderaccounts 
+
+Führt man die InsertUser_skript.py Datei aus, kann man einen neuen Ausbilder
+anlegen. Diese Datei ist ausschließlich für den Betrieb gedacht.
